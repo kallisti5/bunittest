@@ -14,6 +14,7 @@ struct BNetworkAddressFixture
 		TEST(BNetworkAddressFixture::Unset_IPv6),
 		TEST(BNetworkAddressFixture::IsLocal),
 		TEST(BNetworkAddressFixture::IsBroadcast),
+		TEST(BNetworkAddressFixture::SetToBroadcast),
 		TEST(BNetworkAddressFixture::ToString),
 		TEST(BNetworkAddressFixture::Equals)
 	)
@@ -68,6 +69,13 @@ struct BNetworkAddressFixture
 		ASSERT_TRUE(v4Address.IsBroadcast());
 
 		// XXX: No broadcast on IPv6
+	}
+
+	void SetToBroadcast()
+	{
+		BNetworkAddress v4Address;
+		v4Address.SetToBroadcast(AF_INET);
+		ASSERT_TRUE(v4Address.IsBroadcast());
 	}
 
 	void ToString()
