@@ -7,6 +7,9 @@ env["CXX"] = os.getenv("CXX") or env["CXX"]
 env["ENV"].update(x for x in os.environ.items() if x[0].startswith("CCC_"))
 
 env.Append(CPPPATH = ['#external/tpunitpp'])
+env.Append(CXXFLAGS = ['-g'])
+env.Append(LINKFLAGS = ['-g'])
+env.Append(LIBS = ['be'])
 
 Export("env")
 SConscript('kits/network/SConscript')

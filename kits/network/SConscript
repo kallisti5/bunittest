@@ -4,6 +4,8 @@ import platform
 
 Import("env")
 
+env.Append(LIBS = ['network', 'bnetapi'])
+
 framework_code = ['#/external/tpunitpp/tpunit++main.cpp']
 
 bnetworkaddress_code = framework_code + ['BNetworkAddress.cpp']
