@@ -1,0 +1,9 @@
+import os
+import sys
+import platform
+
+Import("env")
+
+BMessage = env.Clone()
+BMessage.Program(target = 'BMessage',
+	source = ['#external/tpunitpp/libtpunit++main.a', 'BMessage.cpp'])

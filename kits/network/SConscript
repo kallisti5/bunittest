@@ -8,8 +8,8 @@ env.Append(LIBS = ['network', 'bnetapi'])
 
 BNetworkAddress = env.Clone()
 BNetworkAddress.Program(target = 'BNetworkAddress',
-	source = ['tpunitpp', 'BNetworkAddress.cpp'])
+	source = ['#external/tpunitpp/libtpunit++main.a', 'BNetworkAddress.cpp'])
 
 BNetworkAddressResolver = env.Clone()
 BNetworkAddressResolver.Program(target = 'BNetworkAddressResolver',
-	source = ['tpunitpp', 'BNetworkAddressResolver.cpp'])
+	source = ['#external/tpunitpp/libtpunit++main.a', 'BNetworkAddressResolver.cpp'])
