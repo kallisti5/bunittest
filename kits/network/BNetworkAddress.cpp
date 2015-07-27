@@ -19,6 +19,8 @@ struct BNetworkAddressFixture
 	BNetworkAddressFixture() : tpunit::TestFixture(
 		TEST(BNetworkAddressFixture::SetTo_IPv4),
 		TEST(BNetworkAddressFixture::SetTo_IPv6),
+		TEST(BNetworkAddressFixture::SetAddress_IPv4),
+		TEST(BNetworkAddressFixture::SetAddress_IPv6),
 		TEST(BNetworkAddressFixture::Unset_IPv4),
 		TEST(BNetworkAddressFixture::Unset_IPv6),
 		TEST(BNetworkAddressFixture::IsLocal),
@@ -56,6 +58,38 @@ struct BNetworkAddressFixture
 		address.SetTo("::1");
 		ASSERT_FALSE(address.IsEmpty());
 		ASSERT_EQUAL(address.Family(), AF_INET6);
+	}
+
+
+	void
+	SetAddress_IPv4()
+	{
+		BNetworkAddress address;
+		ASSERT_EQUAL(address.InitCheck(), B_OK);
+		ASSERT_TRUE(address.IsEmpty());
+
+		struct sockaddr_in socketAddr;
+		ASSERT_GREATER_THAN(inet_pton(AF_INET, "192.168.1.1",
+			&(socketAddr.sin_addr)), 0);
+		ASSERT_EQUAL(address.SetAddress(&(socketAddr.sin_addr)), B_OK);
+
+		ASSERT_EQUAL(address.ToString().String(), "192.168.1.1");
+	}
+
+
+	void
+	SetAddress_IPv6()
+	{
+		BNetworkAddress address;
+		ASSERT_EQUAL(address.InitCheck(), B_OK);
+		ASSERT_TRUE(address.IsEmpty());
+
+		struct sockaddr_in socketAddr;
+		ASSERT_GREATER_THAN(inet_pton(AF_INET6, "feed::dead:beef",
+			&(socketAddr.sin6_addr)), 0);
+		ASSERT_EQUAL(address.SetAddress(&(socketAddr.sin6_addr)), B_OK);
+
+		ASSERT_EQUAL(address.ToString().String(), "feed::dead:beef");
 	}
 
 
