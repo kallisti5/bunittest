@@ -11,5 +11,8 @@ env.Append(CXXFLAGS = ['-g'])
 env.Append(LINKFLAGS = ['-g'])
 env.Append(LIBS = ['be'])
 
+Framework = env.Clone()
+Framework.Object(target = 'tpunitpp', source = ['#/external/tpunitpp/tpunit++main.cpp'])
+
 Export("env")
 SConscript('kits/network/SConscript')

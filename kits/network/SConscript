@@ -6,9 +6,10 @@ Import("env")
 
 env.Append(LIBS = ['network', 'bnetapi'])
 
-framework_code = ['#/external/tpunitpp/tpunit++main.cpp']
-
-bnetworkaddress_code = framework_code + ['BNetworkAddress.cpp']
-
 BNetworkAddress = env.Clone()
-BNetworkAddress.Program(target = 'BNetworkAddress', source = bnetworkaddress_code)
+BNetworkAddress.Program(target = 'BNetworkAddress',
+	source = ['tpunitpp', 'BNetworkAddress.cpp'])
+
+BNetworkAddressResolver = env.Clone()
+BNetworkAddressResolver.Program(target = 'BNetworkAddressResolver',
+	source = ['tpunitpp', 'BNetworkAddressResolver.cpp'])
