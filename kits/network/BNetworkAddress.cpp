@@ -28,7 +28,9 @@ struct BNetworkAddressFixture
 		TEST(BNetworkAddressFixture::ToString),
 		TEST(BNetworkAddressFixture::Flatten_IPv4),
 		TEST(BNetworkAddressFixture::Flatten_IPv6),
-		TEST(BNetworkAddressFixture::Equals)
+		TEST(BNetworkAddressFixture::Equals),
+		TEST(BNetworkAddressFixture::SetToWildcard_IPv4),
+		TEST(BNetworkAddressFixture::SetToWildcard_IPv6)
 	)
 	{}
 
@@ -78,11 +80,15 @@ struct BNetworkAddressFixture
 	void
 	IsLocal()
 	{
-		BNetworkAddress v4Address("127.0.0.1");
-		BNetworkAddress v6Address("::1");
+		BNetworkAddress v4Local(AF_INET, "127.0.0.1");
+		BNetworkAddress v6Local(AF_INET6, "::1");
+		ASSERT_TRUE(v4Local.IsLocal());
+		ASSERT_TRUE(v6Local.IsLocal());
 
-		ASSERT_TRUE(v4Address.IsLocal());
-		ASSERT_TRUE(v6Address.IsLocal());
+		BNetworkAddress v4Remote(AF_INET, "8.8.8.8");
+		BNetworkAddress v6Remote(AF_INET6, "2607:f8b0:4002:c09::8b");
+		ASSERT_FALSE(v4Remote.IsLocal());
+		ASSERT_FALSE(v6Remote.IsLocal());
 	}
 
 
@@ -169,6 +175,30 @@ struct BNetworkAddressFixture
 			sizeof(buffer)), B_OK);
 
 		ASSERT_EQUAL(v6Address, unflattened);
+	}
+
+
+	void
+	SetToWildcard_IPv4()
+	{
+		BNetworkAddress v4Address;
+		v4Address.SetToWildcard(AF_INET);
+
+		ASSERT_EQUAL(v4Address.Family(), AF_INET);
+		ASSERT_EQUAL(v4Address.Port(), 0);
+		ASSERT_TRUE(v4Address.IsWildcard());
+	}
+
+
+	void
+	SetToWildcard_IPv6()
+	{
+		BNetworkAddress v6Address;
+		v6Address.SetToWildcard(AF_INET6);
+
+		ASSERT_EQUAL(v6Address.Family(), AF_INET6);
+		ASSERT_EQUAL(v6Address.Port(), 0);
+		ASSERT_TRUE(v6Address.IsWildcard());
 	}
 
 
