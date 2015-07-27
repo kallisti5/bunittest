@@ -1,3 +1,12 @@
+/*
+ * Copyright 2015 Haiku, Inc. All rights reserved
+ * Released under the terms of the MIT license.
+ *
+ * Authors:
+ *	Alexander von Gluck IV <kallisti5@unixzen.com>
+ */
+
+
 #include <NetworkAddress.h>
 #include <String.h>
 
@@ -23,6 +32,7 @@ struct BNetworkAddressFixture
 	)
 	{}
 
+
 	void
 	SetTo_IPv4()
 	{
@@ -33,6 +43,7 @@ struct BNetworkAddressFixture
 		ASSERT_FALSE(address.IsEmpty());
 		ASSERT_EQUAL(address.Family(), AF_INET);
 	}
+
 
 	void
 	SetTo_IPv6()
@@ -45,6 +56,7 @@ struct BNetworkAddressFixture
 		ASSERT_EQUAL(address.Family(), AF_INET6);
 	}
 
+
 	void
 	Unset_IPv4()
 	{
@@ -53,6 +65,7 @@ struct BNetworkAddressFixture
 		ASSERT_TRUE(address.IsEmpty());
 	}
 
+
 	void
 	Unset_IPv6()
 	{
@@ -60,6 +73,7 @@ struct BNetworkAddressFixture
 		address.Unset();
 		ASSERT_TRUE(address.IsEmpty());
 	}
+
 
 	void
 	IsLocal()
@@ -71,6 +85,7 @@ struct BNetworkAddressFixture
 		ASSERT_TRUE(v6Address.IsLocal());
 	}
 
+
 	void
 	IsBroadcast()
 	{
@@ -79,6 +94,7 @@ struct BNetworkAddressFixture
 
 		// XXX: No broadcast on IPv6
 	}
+
 
 	void
 	IsMulticast()
@@ -90,6 +106,7 @@ struct BNetworkAddressFixture
 		ASSERT_TRUE(v6Address.IsMulticast());
 	}
 
+
 	void
 	SetToBroadcast()
 	{
@@ -97,6 +114,7 @@ struct BNetworkAddressFixture
 		v4Address.SetToBroadcast(AF_INET);
 		ASSERT_TRUE(v4Address.IsBroadcast());
 	}
+
 
 	void
 	ToString()
@@ -107,6 +125,7 @@ struct BNetworkAddressFixture
 		ASSERT_EQUAL(v4Address.ToString(false).String(), "192.168.1.100");
 		ASSERT_EQUAL(v6Address.ToString(false).String(), "feed::dead:beef");
 	}
+
 
 	void
 	Equals()
@@ -119,6 +138,7 @@ struct BNetworkAddressFixture
 		ASSERT_TRUE(v4AddressA.Equals(v4AddressB));
 		ASSERT_TRUE(v6AddressA.Equals(v6AddressB));
 	}
+
 
 	void
 	Flatten_IPv4()
@@ -134,6 +154,7 @@ struct BNetworkAddressFixture
 
 		ASSERT_EQUAL(v4Address, unflattened);
 	}
+
 
 	void
 	Flatten_IPv6()
