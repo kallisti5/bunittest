@@ -37,9 +37,9 @@ struct BMessageFixture
 	New()
 	{
 		BMessage message;
-		ASSERT_TRUE(message.IsEmpty());
-		ASSERT_FALSE(message.IsSystem());
-		ASSERT_FALSE(message.IsReply());
+		EXPECT_TRUE(message.IsEmpty());
+		EXPECT_FALSE(message.IsSystem());
+		EXPECT_FALSE(message.IsReply());
 	}
 
 

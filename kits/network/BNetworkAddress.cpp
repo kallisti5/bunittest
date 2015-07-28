@@ -44,10 +44,10 @@ struct BNetworkAddressFixture
 	{
 		BNetworkAddress address;
 		ASSERT_EQUAL(address.InitCheck(), B_OK);
-		ASSERT_TRUE(address.IsEmpty());
-		address.SetTo("127.0.0.1");
-		ASSERT_FALSE(address.IsEmpty());
-		ASSERT_EQUAL(address.Family(), AF_INET);
+		EXPECT_TRUE(address.IsEmpty());
+		EXPECT_EQUAL(address.SetTo("127.0.0.1"), B_OK);
+		EXPECT_FALSE(address.IsEmpty());
+		EXPECT_EQUAL(address.Family(), AF_INET);
 	}
 
 
@@ -56,10 +56,10 @@ struct BNetworkAddressFixture
 	{
 		BNetworkAddress address;
 		ASSERT_EQUAL(address.InitCheck(), B_OK);
-		ASSERT_TRUE(address.IsEmpty());
-		address.SetTo("::1");
-		ASSERT_FALSE(address.IsEmpty());
-		ASSERT_EQUAL(address.Family(), AF_INET6);
+		EXPECT_TRUE(address.IsEmpty());
+		EXPECT_EQUAL(address.SetTo("::1"), B_OK);
+		EXPECT_FALSE(address.IsEmpty());
+		EXPECT_EQUAL(address.Family(), AF_INET6);
 	}
 
 
@@ -68,7 +68,7 @@ struct BNetworkAddressFixture
 	{
 		BNetworkAddress address;
 		ASSERT_EQUAL(address.InitCheck(), B_OK);
-		ASSERT_TRUE(address.IsEmpty());
+		EXPECT_TRUE(address.IsEmpty());
 
 		struct sockaddr_in socketAddr;
 		ASSERT_GREATER_THAN(inet_pton(AF_INET, "192.168.1.1",
@@ -99,8 +99,9 @@ struct BNetworkAddressFixture
 	Unset_IPv4()
 	{
 		BNetworkAddress address("127.0.0.1");
+		EXPECT_FALSE(address.IsEmpty());
 		address.Unset();
-		ASSERT_TRUE(address.IsEmpty());
+		EXPECT_TRUE(address.IsEmpty());
 	}
 
 
@@ -108,8 +109,9 @@ struct BNetworkAddressFixture
 	Unset_IPv6()
 	{
 		BNetworkAddress address("::1");
+		EXPECT_FALSE(address.IsEmpty());
 		address.Unset();
-		ASSERT_TRUE(address.IsEmpty());
+		EXPECT_TRUE(address.IsEmpty());
 	}
 
 
@@ -118,13 +120,13 @@ struct BNetworkAddressFixture
 	{
 		BNetworkAddress v4Local(AF_INET, "127.0.0.1");
 		BNetworkAddress v6Local(AF_INET6, "::1");
-		ASSERT_TRUE(v4Local.IsLocal());
-		ASSERT_TRUE(v6Local.IsLocal());
+		EXPECT_TRUE(v4Local.IsLocal());
+		EXPECT_TRUE(v6Local.IsLocal());
 
 		BNetworkAddress v4Remote(AF_INET, "8.8.8.8");
 		BNetworkAddress v6Remote(AF_INET6, "2607:f8b0:4002:c09::8b");
-		ASSERT_FALSE(v4Remote.IsLocal());
-		ASSERT_FALSE(v6Remote.IsLocal());
+		EXPECT_FALSE(v4Remote.IsLocal());
+		EXPECT_FALSE(v6Remote.IsLocal());
 	}
 
 
@@ -132,7 +134,7 @@ struct BNetworkAddressFixture
 	IsBroadcast()
 	{
 		BNetworkAddress v4Address("255.255.255.255");
-		ASSERT_TRUE(v4Address.IsBroadcast());
+		EXPECT_TRUE(v4Address.IsBroadcast());
 
 		// XXX: No broadcast on IPv6
 	}
@@ -144,8 +146,8 @@ struct BNetworkAddressFixture
 		BNetworkAddress v4Address("224.0.0.1");
 		BNetworkAddress v6Address("ffx2::");
 
-		ASSERT_TRUE(v4Address.IsMulticast());
-		ASSERT_TRUE(v6Address.IsMulticast());
+		EXPECT_TRUE(v4Address.IsMulticast());
+		EXPECT_TRUE(v6Address.IsMulticast());
 	}
 
 
@@ -154,7 +156,7 @@ struct BNetworkAddressFixture
 	{
 		BNetworkAddress v4Address;
 		v4Address.SetToBroadcast(AF_INET);
-		ASSERT_TRUE(v4Address.IsBroadcast());
+		EXPECT_TRUE(v4Address.IsBroadcast());
 	}
 
 
@@ -164,8 +166,8 @@ struct BNetworkAddressFixture
 		BNetworkAddress v4Address("192.168.1.100");
 		BNetworkAddress v6Address("feed::dead:beef");
 
-		ASSERT_EQUAL(v4Address.ToString(false).String(), "192.168.1.100");
-		ASSERT_EQUAL(v6Address.ToString(false).String(), "feed::dead:beef");
+		EXPECT_EQUAL(v4Address.ToString(false).String(), "192.168.1.100");
+		EXPECT_EQUAL(v6Address.ToString(false).String(), "feed::dead:beef");
 	}
 
 
@@ -177,8 +179,8 @@ struct BNetworkAddressFixture
 		BNetworkAddress v6AddressA("feed::dead:beef");
 		BNetworkAddress v6AddressB("feed::dead:beef");
 
-		ASSERT_TRUE(v4AddressA.Equals(v4AddressB));
-		ASSERT_TRUE(v6AddressA.Equals(v6AddressB));
+		EXPECT_TRUE(v4AddressA.Equals(v4AddressB));
+		EXPECT_TRUE(v6AddressA.Equals(v6AddressB));
 	}
 
 
@@ -194,7 +196,7 @@ struct BNetworkAddressFixture
 		ASSERT_EQUAL(v4Address.Unflatten(B_NETWORK_ADDRESS_TYPE, buffer,
 			sizeof(buffer)), B_OK);
 
-		ASSERT_EQUAL(v4Address, unflattened);
+		EXPECT_EQUAL(v4Address, unflattened);
 	}
 
 
@@ -210,7 +212,7 @@ struct BNetworkAddressFixture
 		ASSERT_EQUAL(v6Address.Unflatten(B_NETWORK_ADDRESS_TYPE, buffer,
 			sizeof(buffer)), B_OK);
 
-		ASSERT_EQUAL(v6Address, unflattened);
+		EXPECT_EQUAL(v6Address, unflattened);
 	}
 
 
@@ -220,9 +222,9 @@ struct BNetworkAddressFixture
 		BNetworkAddress v4Address;
 		v4Address.SetToWildcard(AF_INET);
 
-		ASSERT_EQUAL(v4Address.Family(), AF_INET);
-		ASSERT_EQUAL(v4Address.Port(), 0);
-		ASSERT_TRUE(v4Address.IsWildcard());
+		EXPECT_EQUAL(v4Address.Family(), AF_INET);
+		EXPECT_EQUAL(v4Address.Port(), 0);
+		EXPECT_TRUE(v4Address.IsWildcard());
 	}
 
 
@@ -232,9 +234,9 @@ struct BNetworkAddressFixture
 		BNetworkAddress v6Address;
 		v6Address.SetToWildcard(AF_INET6);
 
-		ASSERT_EQUAL(v6Address.Family(), AF_INET6);
-		ASSERT_EQUAL(v6Address.Port(), 0);
-		ASSERT_TRUE(v6Address.IsWildcard());
+		EXPECT_EQUAL(v6Address.Family(), AF_INET6);
+		EXPECT_EQUAL(v6Address.Port(), 0);
+		EXPECT_TRUE(v6Address.IsWildcard());
 	}
 
 
