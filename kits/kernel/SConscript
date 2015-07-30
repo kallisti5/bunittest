@@ -1,0 +1,11 @@
+import os
+import sys
+import platform
+
+Import("env")
+
+env.Append(LIBS = ['root'])
+
+Area = env.Clone()
+Area.Program(target = 'Area',
+	source = ['#external/tpunitpp/libtpunit++main.a', 'Area.cpp'])

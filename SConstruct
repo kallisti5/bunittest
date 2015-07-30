@@ -15,4 +15,5 @@ env.StaticLibrary(['#/external/tpunitpp/tpunit++main.cpp'])
 
 Export("env")
 SConscript('kits/app/SConscript')
+SConscript('kits/kernel/SConscript')
 SConscript('kits/network/SConscript')
