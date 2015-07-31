@@ -26,7 +26,9 @@ struct AreaFixture
 		TEST(AreaFixture::CreateArea_500M),
 		TEST(AreaFixture::CreateArea_1G),
 		TEST(AreaFixture::TestArea_1M),
-		TEST(AreaFixture::TestArea_10M)
+		TEST(AreaFixture::TestArea_10M),
+		TEST(AreaFixture::TestArea_100M),
+		TEST(AreaFixture::TestArea_1G)
 	)
 	{}
 
@@ -144,4 +146,49 @@ struct AreaFixture
 
 		EXPECT_EQUAL(delete_area(area), B_OK);
 	}
+
+	void
+	TestArea_100M()
+	{
+		size_t testSize = 104857600;
+		char* address;
+		area_id area = create_area("100MiB Test", (void**)&address,
+			B_ANY_ADDRESS, testSize, B_NO_LOCK,
+			B_READ_AREA | B_WRITE_AREA);
+		ASSERT_TRUE(area >= 0);
+		memset(address, 0x0, testSize);
+		for (size_t position = 0; position < testSize; position++)
+			EXPECT_EQUAL(address[position], 0x0);
+		memset(address, 0xF, testSize);
+		for (size_t position = 0; position < testSize; position++)
+			EXPECT_EQUAL(address[position], 0xF);
+
+		// tpunit doesn't seem to catch :-/
+		//EXPECT_ANY_THROW(address[testSize + 1] = 0);
+
+		EXPECT_EQUAL(delete_area(area), B_OK);
+	}
+
+	void
+	TestArea_1G()
+	{
+		size_t testSize = 1048576000;
+		char* address;
+		area_id area = create_area("1GiB Test", (void**)&address,
+			B_ANY_ADDRESS, testSize, B_NO_LOCK,
+			B_READ_AREA | B_WRITE_AREA);
+		ASSERT_TRUE(area >= 0);
+		memset(address, 0x0, testSize);
+		for (size_t position = 0; position < testSize; position++)
+			EXPECT_EQUAL(address[position], 0x0);
+		memset(address, 0xF, testSize);
+		for (size_t position = 0; position < testSize; position++)
+			EXPECT_EQUAL(address[position], 0xF);
+
+		// tpunit doesn't seem to catch :-/
+		//EXPECT_ANY_THROW(address[testSize + 1] = 0);
+
+		EXPECT_EQUAL(delete_area(area), B_OK);
+	}
+
 } __AreaFixture;
